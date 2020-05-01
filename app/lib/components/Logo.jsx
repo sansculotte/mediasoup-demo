@@ -10,7 +10,7 @@ const Logo = ({ messages }) =>
 {
 	return (
 	    <div data-component='Logo'>
-              Lirpo haba
+
               <img src="/resources/images/logo_square_notypo.svg" className="App-logo" alt="logo" width="120"/>
               
       {/* 			{ */}
