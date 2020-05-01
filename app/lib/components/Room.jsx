@@ -10,6 +10,7 @@ import * as requestActions from '../redux/requestActions';
 import { Appear } from './transitions';
 import Me from './Me';
 import Chat from './Chat';
+import Logo from './Logo';
 import ChatInput from './ChatInput';
 import Peers from './Peers';
 import Stats from './Stats';
@@ -33,7 +34,9 @@ class Room extends React.Component
 				<div data-component='Room'>
 					<Notifications />
 
-          <Chat />
+                                  <Chat />
+                                  
+                                  <Logo />
 
 					<div className='state'>
 						<div className={classnames('icon', room.state)} />
