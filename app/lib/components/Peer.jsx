@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as appPropTypes from './appPropTypes';
@@ -13,7 +13,6 @@ const Peer = (props) =>
     peer,
     audioConsumer,
     videoConsumer,
-    audioMuted,
     faceDetection,
     onSetStatsPeerId
   } = props;
@@ -30,12 +29,30 @@ const Peer = (props) =>
 		!videoConsumer.remotelyPaused
   );
 
+  const [ muted, setMuted ] = useState(false);
+  const [ volume, setVolume ] = useState(1.0);
+
+  const audioMuted = props.audioMuted || muted;
+
   return (
     <div data-component='Peer'>
       <div className='indicators'>
         <If condition={!audioEnabled}>
           <div className='icon mic-off' />
         </If>
+        <input
+          type={'range'}
+          step={0.01}
+          width={100}
+          min={0}
+          max={1}
+          onChange={(ev) => setVolume(parseFloat(ev.target.value))}
+          value={volume}
+        />
+        <button
+          onClick={() => setMuted(!muted)}
+          style={{ backgroundColor: muted ? '#f00' : '#ccc' }}
+        >O</button>
 
         <If condition={!videoConsumer}>
           <div className='icon webcam-off' />
@@ -87,6 +104,7 @@ const Peer = (props) =>
           roomClient.requestConsumerKeyFrame(videoConsumer.id);
         }}
         onStatsClick={onSetStatsPeerId}
+        volume={volume}
       />
     </div>
   );

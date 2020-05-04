@@ -83,7 +83,8 @@ export default class PeerView extends React.Component
       onChangeVideoPreferredLayers,
       onChangeVideoPriority,
       onRequestKeyFrame,
-      onStatsClick
+      onStatsClick,
+      volume
     } = this.props;
 
     const {
@@ -95,6 +96,11 @@ export default class PeerView extends React.Component
       videoElemPaused,
       maxSpatialLayer
     } = this.state;
+
+    const { audioElem } = this.refs;
+
+    if (audioElem && !isNaN(volume))
+      audioElem.volume = volume;
 
     return (
       <div data-component='PeerView'>
@@ -140,7 +146,7 @@ export default class PeerView extends React.Component
                   {'id: '}
                   <span
                     className='copiable'
-                    data-tip='Copy video producer id to clipboard'
+                    data-tip='Copy audio consumer id to clipboard'
                     onClick={() => clipboardCopy(`"${audioConsumerId}"`)}
                   >
                     {audioConsumerId}
@@ -452,7 +458,7 @@ export default class PeerView extends React.Component
           ref='audioElem'
           autoPlay
           muted={isMe || audioMuted}
-          controls={false}
+          controls
         />
 
         <canvas
@@ -789,5 +795,6 @@ PeerView.propTypes =
   onChangeVideoPreferredLayers  : PropTypes.func,
   onChangeVideoPriority         : PropTypes.func,
   onRequestKeyFrame             : PropTypes.func,
-  onStatsClick                  : PropTypes.func.isRequired
+  onStatsClick                  : PropTypes.func.isRequired,
+  volume                        : PropTypes.number
 };
