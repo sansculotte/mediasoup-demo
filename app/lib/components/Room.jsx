@@ -9,6 +9,8 @@ import { withRoomContext } from '../RoomContext';
 import * as requestActions from '../redux/requestActions';
 import { Appear } from './transitions';
 import Me from './Me';
+import Chat from './Chat';
+import Logo from './Logo';
 import ChatInput from './ChatInput';
 import Peers from './Peers';
 import Stats from './Stats';
@@ -31,6 +33,10 @@ class Room extends React.Component
 			<Appear duration={300}>
 				<div data-component='Room'>
 					<Notifications />
+
+                                  <Chat />
+                                  
+                                  <Logo />
 
 					<div className='state'>
 						<div className={classnames('icon', room.state)} />

@@ -528,11 +528,10 @@ export default class RoomClient
 										break;
 									}
 
-									store.dispatch(requestActions.notify(
+									store.dispatch(requestActions.chat(
 										{
-											title   : `${sendingPeer.displayName} says:`,
-											text    : message,
-											timeout : 5000
+											peer: sendingPeer.displayName,
+											text: message,
 										}));
 
 									break;
@@ -1792,6 +1791,14 @@ export default class RoomClient
 					text : `chat DataProducer.send() failed: ${error}`
 				}));
 		}
+
+    // echo to chat
+    store.dispatch(requestActions.chat(
+      {
+        peer: 'me',
+        text
+      }
+    ));
 	}
 
 	async sendBotMessage(text)
