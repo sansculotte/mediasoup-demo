@@ -56,7 +56,7 @@ module.exports =
 		'func-call-spacing': 2,
 		'generator-star-spacing': 2,
 		'guard-for-in': 2,
-		'indent': [ 2, 'tab', { 'SwitchCase': 1 } ],
+		'indent': ["error", 2 ],
 		'key-spacing': [ 2,
 		{
 			singleLine:
@@ -66,7 +66,7 @@ module.exports =
 			},
 			multiLine:
 			{
-				beforeColon: true,
+				beforeColon: false,
 				afterColon: true,
 				align: 'colon'
 			}
@@ -198,8 +198,8 @@ module.exports =
 		'react/jsx-curly-spacing': 2,
 		'react/jsx-equals-spacing': 2,
 		'react/jsx-handler-names': 2,
-		'react/jsx-indent-props': [ 2, 'tab' ],
-		'react/jsx-indent': [ 2, 'tab' ],
+		'react/jsx-indent-props': [ 'error', 2 ],
+		'react/jsx-indent': [ 'error', 2 ],
 		'react/jsx-key': 2,
 		'react/jsx-max-props-per-line': 0,
 		'react/jsx-no-bind': 0,

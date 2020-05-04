@@ -10,16 +10,16 @@ import messages from './messages';
 import notifications from './notifications';
 
 const reducers = combineReducers(
-	{
-		room,
-		me,
-		producers,
-		dataProducers,
-		peers,
-		consumers,
-		dataConsumers,
+  {
+    room,
+    me,
+    producers,
+    dataProducers,
+    peers,
+    consumers,
+    dataConsumers,
     messages,
-		notifications
-	});
+    notifications
+  });
 
 export default reducers;
