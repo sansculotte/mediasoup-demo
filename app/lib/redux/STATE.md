@@ -73,7 +73,8 @@
       displayName     : 'Alice Thomsom',
       device          : { flag: 'chrome', name: 'Chrome', version: '58' },
       consumers       : [ '5551-qwer', '5552-zxzx' ],
-      dataConsumers   : [ '6661-asdf' ]
+      dataConsumers   : [ '6661-asdf' ],
+      volume          : 0.0 .. 1.0
     }
   },
   consumers :
@@ -93,7 +94,7 @@
       preferredSpatialLayer  : undefined,
       preferredTemporalLayer : undefined,
       priority               : 1,
-      track                  : MediaStreamTrack,
+      track                  : MediaStreamTrack, // kind = 'audio', muted = false
       score                  : [ { ssrc: 3331, score: 10 } ]
     },
     '5552-zxzx' :

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as appPropTypes from './appPropTypes';
@@ -8,131 +8,151 @@ import PeerView from './PeerView';
 
 const Peer = (props) =>
 {
-	const {
-		roomClient,
-		peer,
-		audioConsumer,
-		videoConsumer,
-		audioMuted,
-		faceDetection,
-		onSetStatsPeerId
-	} = props;
+  const {
+    roomClient,
+    peer,
+    audioConsumer,
+    videoConsumer,
+    faceDetection,
+    onSetStatsPeerId
+  } = props;
 
-	const audioEnabled = (
-		Boolean(audioConsumer) &&
+  const audioEnabled = (
+    Boolean(audioConsumer) &&
 		!audioConsumer.locallyPaused &&
 		!audioConsumer.remotelyPaused
-	);
+  );
 
-	const videoVisible = (
-		Boolean(videoConsumer) &&
+  const videoVisible = (
+    Boolean(videoConsumer) &&
 		!videoConsumer.locallyPaused &&
 		!videoConsumer.remotelyPaused
-	);
+  );
 
-	return (
-		<div data-component='Peer'>
-			<div className='indicators'>
-				<If condition={!audioEnabled}>
-					<div className='icon mic-off' />
-				</If>
+  const [ muted, setMuted ] = useState(false);
+  const [ volume, setVolume ] = useState(1.0);
 
-				<If condition={!videoConsumer}>
-					<div className='icon webcam-off' />
-				</If>
-			</div>
+  const audioMuted = props.audioMuted || muted;
 
-			<PeerView
-				peer={peer}
-				audioConsumerId={audioConsumer ? audioConsumer.id : null}
-				videoConsumerId={videoConsumer ? videoConsumer.id : null}
-				audioRtpParameters={audioConsumer ? audioConsumer.rtpParameters : null}
-				videoRtpParameters={videoConsumer ? videoConsumer.rtpParameters : null}
-				consumerSpatialLayers={videoConsumer ? videoConsumer.spatialLayers : null}
-				consumerTemporalLayers={videoConsumer ? videoConsumer.temporalLayers : null}
-				consumerCurrentSpatialLayer={
-					videoConsumer ? videoConsumer.currentSpatialLayer : null
-				}
-				consumerCurrentTemporalLayer={
-					videoConsumer ? videoConsumer.currentTemporalLayer : null
-				}
-				consumerPreferredSpatialLayer={
-					videoConsumer ? videoConsumer.preferredSpatialLayer : null
-				}
-				consumerPreferredTemporalLayer={
-					videoConsumer ? videoConsumer.preferredTemporalLayer : null
-				}
-				consumerPriority={videoConsumer ? videoConsumer.priority : null}
-				audioTrack={audioConsumer ? audioConsumer.track : null}
-				videoTrack={videoConsumer ? videoConsumer.track : null}
-				audioMuted={audioMuted}
-				videoVisible={videoVisible}
-				videoMultiLayer={videoConsumer && videoConsumer.type !== 'simple'}
-				audioCodec={audioConsumer ? audioConsumer.codec : null}
-				videoCodec={videoConsumer ? videoConsumer.codec : null}
-				audioScore={audioConsumer ? audioConsumer.score : null}
-				videoScore={videoConsumer ? videoConsumer.score : null}
-				faceDetection={faceDetection}
-				onChangeVideoPreferredLayers={(spatialLayer, temporalLayer) =>
-				{
-					roomClient.setConsumerPreferredLayers(
-						videoConsumer.id, spatialLayer, temporalLayer);
-				}}
-				onChangeVideoPriority={(priority) =>
-				{
-					roomClient.setConsumerPriority(videoConsumer.id, priority);
-				}}
-				onRequestKeyFrame={() =>
-				{
-					roomClient.requestConsumerKeyFrame(videoConsumer.id);
-				}}
-				onStatsClick={onSetStatsPeerId}
-			/>
-		</div>
-	);
+  return (
+    <div data-component='Peer'>
+      <div className='indicators'>
+        <If condition={!audioEnabled}>
+          <div className='icon mic-off' />
+        </If>
+        <input
+          className='slider'
+          type={'range'}
+          step={0.01}
+          width={100}
+          min={0}
+          max={1}
+          onChange={(ev) => setVolume(parseFloat(ev.target.value))}
+          value={volume}
+        />
+        <div
+          className={muted ? 'button mic off' : 'button mic on'}
+          onClick={() => setMuted(!muted)}
+          style={{ width: '25px', height: '25px' }}
+        >.</div>
+
+        <If condition={!videoConsumer}>
+          <div className='icon webcam-off' />
+        </If>
+      </div>
+
+      <PeerView
+        peer={peer}
+        audioConsumerId={audioConsumer ? audioConsumer.id : null}
+        videoConsumerId={videoConsumer ? videoConsumer.id : null}
+        audioRtpParameters={audioConsumer ? audioConsumer.rtpParameters : null}
+        videoRtpParameters={videoConsumer ? videoConsumer.rtpParameters : null}
+        consumerSpatialLayers={videoConsumer ? videoConsumer.spatialLayers : null}
+        consumerTemporalLayers={videoConsumer ? videoConsumer.temporalLayers : null}
+        consumerCurrentSpatialLayer={
+          videoConsumer ? videoConsumer.currentSpatialLayer : null
+        }
+        consumerCurrentTemporalLayer={
+          videoConsumer ? videoConsumer.currentTemporalLayer : null
+        }
+        consumerPreferredSpatialLayer={
+          videoConsumer ? videoConsumer.preferredSpatialLayer : null
+        }
+        consumerPreferredTemporalLayer={
+          videoConsumer ? videoConsumer.preferredTemporalLayer : null
+        }
+        consumerPriority={videoConsumer ? videoConsumer.priority : null}
+        audioTrack={audioConsumer ? audioConsumer.track : null}
+        videoTrack={videoConsumer ? videoConsumer.track : null}
+        audioMuted={audioMuted}
+        videoVisible={videoVisible}
+        videoMultiLayer={videoConsumer && videoConsumer.type !== 'simple'}
+        audioCodec={audioConsumer ? audioConsumer.codec : null}
+        videoCodec={videoConsumer ? videoConsumer.codec : null}
+        audioScore={audioConsumer ? audioConsumer.score : null}
+        videoScore={videoConsumer ? videoConsumer.score : null}
+        faceDetection={faceDetection}
+        onChangeVideoPreferredLayers={(spatialLayer, temporalLayer) =>
+        {
+          roomClient.setConsumerPreferredLayers(
+            videoConsumer.id, spatialLayer, temporalLayer);
+        }}
+        onChangeVideoPriority={(priority) =>
+        {
+          roomClient.setConsumerPriority(videoConsumer.id, priority);
+        }}
+        onRequestKeyFrame={() =>
+        {
+          roomClient.requestConsumerKeyFrame(videoConsumer.id);
+        }}
+        onStatsClick={onSetStatsPeerId}
+        volume={volume}
+      />
+    </div>
+  );
 };
 
 Peer.propTypes =
 {
-	roomClient       : PropTypes.any.isRequired,
-	peer             : appPropTypes.Peer.isRequired,
-	audioConsumer    : appPropTypes.Consumer,
-	videoConsumer    : appPropTypes.Consumer,
-	audioMuted       : PropTypes.bool,
-	faceDetection    : PropTypes.bool.isRequired,
-	onSetStatsPeerId : PropTypes.func.isRequired
+  roomClient      : PropTypes.any.isRequired,
+  peer            : appPropTypes.Peer.isRequired,
+  audioConsumer   : appPropTypes.Consumer,
+  videoConsumer   : appPropTypes.Consumer,
+  audioMuted      : PropTypes.bool,
+  faceDetection   : PropTypes.bool.isRequired,
+  onSetStatsPeerId: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { id }) =>
 {
-	const me = state.me;
-	const peer = state.peers[id];
-	const consumersArray = peer.consumers
-		.map((consumerId) => state.consumers[consumerId]);
-	const audioConsumer =
+  const me = state.me;
+  const peer = state.peers[id];
+  const consumersArray = peer.consumers
+    .map((consumerId) => state.consumers[consumerId]);
+  const audioConsumer =
 		consumersArray.find((consumer) => consumer.track.kind === 'audio');
-	const videoConsumer =
+  const videoConsumer =
 		consumersArray.find((consumer) => consumer.track.kind === 'video');
 
-	return {
-		peer,
-		audioConsumer,
-		videoConsumer,
-		audioMuted    : me.audioMuted,
-		faceDetection : state.room.faceDetection
-	};
+  return {
+    peer,
+    audioConsumer,
+    videoConsumer,
+    audioMuted   : me.audioMuted,
+    faceDetection: state.room.faceDetection
+  };
 };
 
 const mapDispatchToProps = (dispatch) =>
 {
-	return {
-		onSetStatsPeerId : (peerId) => dispatch(stateActions.setRoomStatsPeerId(peerId))
-	};
+  return {
+    onSetStatsPeerId: (peerId) => dispatch(stateActions.setRoomStatsPeerId(peerId))
+  };
 };
 
 const PeerContainer = withRoomContext(connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Peer));
 
 export default PeerContainer;
