@@ -41,6 +41,7 @@ const Peer = (props) =>
           <div className='icon mic-off' />
         </If>
         <input
+          className='slider'
           type={'range'}
           step={0.01}
           width={100}
@@ -49,10 +50,11 @@ const Peer = (props) =>
           onChange={(ev) => setVolume(parseFloat(ev.target.value))}
           value={volume}
         />
-        <button
+        <div
+          className={muted ? 'button mic off' : 'button mic on'}
           onClick={() => setMuted(!muted)}
-          style={{ backgroundColor: muted ? '#f00' : '#ccc' }}
-        >O</button>
+          style={{ width: '25px', height: '25px' }}
+        >.</div>
 
         <If condition={!videoConsumer}>
           <div className='icon webcam-off' />

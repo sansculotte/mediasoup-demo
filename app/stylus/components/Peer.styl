@@ -22,6 +22,57 @@
 		justify-content: flex-end;
 		align-items: center;
 
+    > .slider {
+			margin: 4px;
+			-webkit-appearance: none;
+			outline: none;
+			border: 0;
+			background: #888;
+			height: 5px;
+			&::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				border-radius: 5%;
+				width: 6px;
+				height: 24px;
+				background: #ccc;
+				cursor: pointer;
+			}
+			&::-moz-range-thumb {
+				border-radius: 5%;
+				width: 6px;
+				height: 24px;
+				background: #ccc;
+				cursor: pointer;
+			}
+    }
+
+		> .button {
+			flex: 0 0 auto;
+			margin: 4px;
+			margin-left: 0;
+			border-radius: 2px;
+			pointer-events: auto;
+			background-position: center;
+			background-size: 75%;
+			background-repeat: no-repeat;
+			background-color: rgba(#fff, 0.5);
+			cursor: pointer;
+			transition-property: opacity, background-color;
+			transition-duration: 0.15s;
+
+			&.mic {
+				&.on {
+					background-image: url('/resources/images/icon_mic_black_on.svg');
+				}
+
+				&.off {
+					background-image: url('/resources/images/icon_mic_white_off.svg');
+					background-color: rgba(#fff, 0.0);
+				}
+      }
+    }
+
 		> .icon {
 			flex: 0 0 auto;
 			margin: 4px;
